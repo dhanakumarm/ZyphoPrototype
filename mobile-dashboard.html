@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zypho - Project Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F8F9FA;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(46, 134, 193, 0.3);
+        }
+        
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 16px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0.95);
+        }
+        
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .pipe-logo {
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .pipe-sw {
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+        
+        .user-profile:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .project-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .project-details h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .project-id {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .overall-progress {
+            text-align: right;
+        }
+        
+        .progress-percentage {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .progress-label {
+            font-size: 12px;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .content {
+            padding: 20px 16px 80px 16px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        .progress-overview {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .overview-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .overview-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            color: #2E86C1;
+        }
+        
+        .progress-bar-container {
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            background: #E9ECEF;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #27AE60, #2ECC71);
+            height: 100%;
+            width: 45%;
+            border-radius: 6px;
+            position: relative;
+            transition: width 0.8s ease;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .progress-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2C3E50;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #7B8A8B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .forms-section {
+            margin-bottom: 24px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .view-all {
+            color: #2E86C1;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .form-card:active {
+            transform: translateY(2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .form-header {
+            padding: 20px 20px 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+        }
+        
+        .form-status {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .form-status.completed {
+            background: #27AE60;
+            box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2);
+        }
+        
+        .form-status.in-progress {
+            background: #F39C12;
+            box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2);
+        }
+        
+        .form-status.pending {
+            background: #BDC3C7;
+            box-shadow: 0 0 0 2px rgba(189, 195, 199, 0.2);
+        }
+        
+        .form-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        
+        .form-icon.design { color: #8E44AD; }
+        .form-icon.installation { color: #F39C12; }
+        .form-icon.registration { color: #27AE60; }
+        .form-icon.sap { color: #2E86C1; }
+        
+        .form-content {
+            flex: 1;
+        }
+        
+        .form-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 4px;
+        }
+        
+        .form-subtitle {
+            font-size: 14px;
+            color: #7B8A8B;
+            margin-bottom: 12px;
+        }
+        
+        .form-progress {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .progress-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .progress-mini-bar {
+            background: #E9ECEF;
+            height: 4px;
+            border-radius: 2px;
+            width: 60px;
+            overflow: hidden;
+            margin-left: 12px;
+        }
+        
+        .progress-mini-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-mini-fill.completed { background: #27AE60; width: 100%; }
+        .progress-mini-fill.in-progress { background: #F39C12; width: 60%; }
+        .progress-mini-fill.pending { background: #BDC3C7; width: 0%; }
+        
+        .quick-actions {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .actions-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 16px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .action-btn {
+            padding: 16px 12px;
+            background: #F8F9FA;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            min-height: 56px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-btn:active {
+            background: #E9ECEF;
+            transform: scale(0.98);
+        }
+        
+        .action-icon {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 4px;
+            color: #2E86C1;
+        }
+        
+        .action-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 20px;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            background: #F8F9FA;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #7B8A8B;
+            font-weight: 500;
+            min-height: 48px;
+        }
+        
+        .nav-btn.primary {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+        }
+        
+        .nav-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .content {
+                padding: 16px 12px 80px 12px;
+            }
+            
+            .progress-stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-top">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.location.href='mobile-customer-list.html'">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </button>
+                <div class="brand-logo">
+                    <div class="pipe-logo">PiPe<span class="pipe-sw">SW</span></div>
+                    <div class="header-title">Dashboard</div>
+                </div>
+            </div>
+            <div class="user-profile" onclick="showProfile()">
+                <div class="user-avatar">JS</div>
+                <div class="user-name">John Smith</div>
+            </div>
+        </div>
+        
+        <div class="project-info">
+            <div class="project-details">
+                <h2 id="customer-name">Loading...</h2>
+                <div class="project-id" id="customer-details">Loading project details...</div>
+            </div>
+            <div class="overall-progress">
+                <div class="progress-percentage" id="overall-progress">0%</div>
+                <div class="progress-label">Complete</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="progress-overview">
+            <div class="overview-title">
+                <svg class="overview-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+                Project Progress
+            </div>
+            
+            <div class="progress-bar-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            
+            <div class="progress-stats">
+                <div class="stat-item">
+                    <div class="stat-number">2</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Pending</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="forms-section">
+            <div class="section-header">
+                <div class="section-title">Installation Workflow</div>
+                <a href="mobile-form-groups.html" class="view-all">View All</a>
+            </div>
+            
+            <a href="design-checklist-form.html" class="form-card">
+                <div class="form-header">
+                    <div class="form-status completed"></div>
+                    <svg class="form-icon design" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11H3v8h6m0 0l6.172-6.172a2 2 0 1 1 2.829 2.829L11.828 21H9v-6z"/>
+                    </svg>
+                    <div class="form-content">
+                        <div class="form-title">Design Checklist</div>
+                        <div class="form-subtitle">Pre-installation validation</div>
+                        <div class="form-progress">
+                            <div class="progress-text">13/13 Questions</div>
+                            <div class="progress-mini-bar">
+                                <div class="progress-mini-fill completed"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="installation-checklist-form.html" class="form-card">
+                <div class="form-header">
+                    <div class="form-status in-progress"></div>
+                    <svg class="form-icon installation" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                    </svg>
+                    <div class="form-content">
+                        <div class="form-title">Installation Checklist</div>
+                        <div class="form-subtitle">Step-by-step installation</div>
+                        <div class="form-progress">
+                            <div class="progress-text">5/16 Steps</div>
+                            <div class="progress-mini-bar">
+                                <div class="progress-mini-fill in-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="registration-form.html" class="form-card">
+                <div class="form-header">
+                    <div class="form-status pending"></div>
+                    <svg class="form-icon registration" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    <div class="form-content">
+                        <div class="form-title">Registration Form</div>
+                        <div class="form-subtitle">Product registration</div>
+                        <div class="form-progress">
+                            <div class="progress-text">0/6 Sections</div>
+                            <div class="progress-mini-bar">
+                                <div class="progress-mini-fill pending"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="sap-checklist-form.html" class="form-card">
+                <div class="form-header">
+                    <div class="form-status pending"></div>
+                    <svg class="form-icon sap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"/>
+                        <circle cx="12" cy="12" r="9"/>
+                    </svg>
+                    <div class="form-content">
+                        <div class="form-title">SAP Checklist</div>
+                        <div class="form-subtitle">Compliance certification</div>
+                        <div class="form-progress">
+                            <div class="progress-text">0/7 Questions</div>
+                            <div class="progress-mini-bar">
+                                <div class="progress-mini-fill pending"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="quick-actions">
+            <div class="actions-title">Quick Actions</div>
+            <div class="actions-grid">
+                <a href="installation-checklist-form.html" class="action-btn">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4"/>
+                        <circle cx="12" cy="12" r="9"/>
+                    </svg>
+                    <div class="action-text">Continue Install</div>
+                </a>
+                <a href="#" class="action-btn" onclick="takePhoto()">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                    <div class="action-text">Take Photo</div>
+                </a>
+                <a href="#" class="action-btn" onclick="viewReports()">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14,2 14,8 20,8"/>
+                    </svg>
+                    <div class="action-text">View Reports</div>
+                </a>
+                <a href="#" class="action-btn" onclick="syncData()">
+                    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6M1 20v-6h6m14-4a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 10"/>
+                    </svg>
+                    <div class="action-text">Sync Data</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <button class="nav-btn">Projects</button>
+        <button class="nav-btn primary">Dashboard</button>
+        <button class="nav-btn" onclick="window.location.href='mobile-settings.html'">Settings</button>
+    </div>
+
+    <script>
+        // Load customer data and initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCustomerData();
+            setTimeout(() => {
+                const progress = sessionStorage.getItem('customerProgress') || '45';
+                document.querySelector('.progress-fill').style.width = progress + '%';
+            }, 500);
+        });
+        
+        function loadCustomerData() {
+            const customerDataStr = sessionStorage.getItem('selectedCustomerData');
+            
+            if (customerDataStr) {
+                const customerData = JSON.parse(customerDataStr);
+                
+                // Update customer name and details
+                document.getElementById('customer-name').textContent = customerData.name || 'Customer Project';
+                document.getElementById('customer-details').textContent = 
+                    `${customerData.projectId} • WWHRS System • ${customerData.address}`;
+                
+                // Update overall progress
+                document.getElementById('overall-progress').textContent = customerData.progress + '%';
+                
+                // Store progress for animation
+                sessionStorage.setItem('customerProgress', customerData.progress);
+            } else {
+                // Default fallback if no customer selected
+                document.getElementById('customer-name').textContent = 'No Customer Selected';
+                document.getElementById('customer-details').textContent = 'Please select a customer project';
+                document.getElementById('overall-progress').textContent = '0%';
+            }
+        }
+        
+        function showProfile() {
+            // Simulate profile dropdown
+            console.log('Profile clicked');
+        }
+        
+        function takePhoto() {
+            // Simulate camera opening
+            alert('Camera would open here for photo capture');
+        }
+        
+        function viewReports() {
+            // Simulate reports view
+            alert('Reports view would open here');
+        }
+        
+        function syncData() {
+            // Simulate data sync
+            alert('Data sync initiated');
+        }
+        
+        // Touch feedback for all interactive elements
+        document.querySelectorAll('.form-card, .action-btn, .nav-btn, .back-btn, .user-profile').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.8';
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+            
+            element.addEventListener('touchcancel', function() {
+                this.style.opacity = '1';
+            });
+        });
+        
+        // Simulate real-time progress updates
+        setInterval(() => {
+            const stats = document.querySelectorAll('.stat-number');
+            // Could update stats based on real data
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zypho - Form Groups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F8F9FA;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(46, 134, 193, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 16px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(0.95);
+        }
+        
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .progress-indicator {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .content {
+            padding: 20px 16px 80px 16px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        
+        .workflow-header {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        
+        .workflow-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+        
+        .workflow-subtitle {
+            color: #7B8A8B;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .workflow-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        
+        .workflow-step {
+            display: flex;
+            align-items: center;
+        }
+        
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        
+        .step-circle.completed {
+            background: #27AE60;
+            color: white;
+        }
+        
+        .step-circle.current {
+            background: #F39C12;
+            color: white;
+        }
+        
+        .step-circle.pending {
+            background: #E9ECEF;
+            color: #7B8A8B;
+        }
+        
+        .step-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2C3E50;
+        }
+        
+        .step-arrow {
+            color: #BDC3C7;
+            margin: 0 8px;
+            display: none;
+        }
+        
+        .group-section {
+            margin-bottom: 24px;
+        }
+        
+        .group-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .group-card:active {
+            transform: translateY(2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .group-card.pre-install {
+            border-left: 6px solid #8E44AD;
+        }
+        
+        .group-card.installation {
+            border-left: 6px solid #F39C12;
+        }
+        
+        .group-card.post-install {
+            border-left: 6px solid #27AE60;
+        }
+        
+        .group-header {
+            padding: 24px 24px 20px 24px;
+            position: relative;
+        }
+        
+        .group-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .group-status.completed {
+            background: #D4FFDF;
+            color: #27AE60;
+        }
+        
+        .group-status.in-progress {
+            background: #FFF4E6;
+            color: #F39C12;
+        }
+        
+        .group-status.pending {
+            background: #F8F9FA;
+            color: #7B8A8B;
+        }
+        
+        .group-icon-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .group-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 16px;
+            padding: 12px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .group-icon.pre-install {
+            background: rgba(142, 68, 173, 0.1);
+            color: #8E44AD;
+        }
+        
+        .group-icon.installation {
+            background: rgba(243, 156, 18, 0.1);
+            color: #F39C12;
+        }
+        
+        .group-icon.post-install {
+            background: rgba(39, 174, 96, 0.1);
+            color: #27AE60;
+        }
+        
+        .group-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 4px;
+        }
+        
+        .group-subtitle {
+            font-size: 14px;
+            color: #7B8A8B;
+        }
+        
+        .group-description {
+            color: #7B8A8B;
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .group-progress {
+            background: #F8F9FA;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .progress-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .progress-percentage {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2E86C1;
+        }
+        
+        .progress-bar {
+            background: #E9ECEF;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+        
+        .progress-fill.completed {
+            background: linear-gradient(90deg, #27AE60, #2ECC71);
+            width: 100%;
+        }
+        
+        .progress-fill.in-progress {
+            background: linear-gradient(90deg, #F39C12, #E67E22);
+            width: 60%;
+        }
+        
+        .progress-fill.pending {
+            background: #BDC3C7;
+            width: 0%;
+        }
+        
+        .group-forms {
+            padding: 0 24px 24px 24px;
+        }
+        
+        .forms-count {
+            font-size: 14px;
+            color: #7B8A8B;
+            margin-bottom: 12px;
+        }
+        
+        .forms-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .form-tag {
+            background: #F8F9FA;
+            color: #2C3E50;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #E9ECEF;
+        }
+        
+        .form-tag.completed {
+            background: #D4FFDF;
+            color: #27AE60;
+            border-color: #27AE60;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .cta-text {
+            margin-bottom: 20px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .cta-btn {
+            background: white;
+            color: #2E86C1;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 20px;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            background: #F8F9FA;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #7B8A8B;
+            font-weight: 500;
+            min-height: 48px;
+        }
+        
+        .nav-btn.primary {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+        }
+        
+        .nav-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 480px) {
+            .content {
+                padding: 16px 12px 80px 12px;
+            }
+            
+            .workflow-steps {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .step-arrow {
+                display: block;
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.location.href='mobile-dashboard.html'">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5m7-7l-7 7 7 7"/>
+                    </svg>
+                </button>
+                <div class="header-title">Installation Workflow</div>
+            </div>
+            <div class="progress-indicator">2 of 4 Complete</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="workflow-header">
+            <div class="workflow-title">Project Alpha-001</div>
+            <div class="workflow-subtitle">Complete installation workflow</div>
+            
+            <div class="workflow-steps">
+                <div class="workflow-step">
+                    <div class="step-circle completed">✓</div>
+                    <div class="step-text">Design</div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="step-circle current">2</div>
+                    <div class="step-text">Install</div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="step-circle pending">3</div>
+                    <div class="step-text">Register</div>
+                </div>
+                <div class="step-arrow">→</div>
+                <div class="workflow-step">
+                    <div class="step-circle pending">4</div>
+                    <div class="step-text">Certify</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="group-section">
+            <a href="design-checklist-form.html" class="group-card pre-install">
+                <div class="group-header">
+                    <div class="group-status completed">Completed</div>
+                    <div class="group-icon-container">
+                        <div class="group-icon pre-install">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 11H3v8h6m0 0l6.172-6.172a2 2 0 1 1 2.829 2.829L11.828 21H9v-6z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="group-title">PRE-INSTALLATION</div>
+                            <div class="group-subtitle">Design & Planning</div>
+                        </div>
+                    </div>
+                    <div class="group-description">
+                        System design validation including dwelling evaluation, drainage connections, plumbing configurations, and installation location requirements.
+                    </div>
+                    <div class="group-progress">
+                        <div class="progress-header">
+                            <div class="progress-label">Design Checklist Progress</div>
+                            <div class="progress-percentage">100%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill completed"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-forms">
+                    <div class="forms-count">1 form in this section</div>
+                    <div class="forms-list">
+                        <div class="form-tag completed">✓ Design Checklist (13 Questions)</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="group-section">
+            <a href="installation-checklist-form.html" class="group-card installation">
+                <div class="group-header">
+                    <div class="group-status in-progress">In Progress</div>
+                    <div class="group-icon-container">
+                        <div class="group-icon installation">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="group-title">INSTALLATION</div>
+                            <div class="group-subtitle">Physical Installation</div>
+                        </div>
+                    </div>
+                    <div class="group-description">
+                        Step-by-step installation procedure with photo documentation, progress tracking, and verification at each stage of the installation process.
+                    </div>
+                    <div class="group-progress">
+                        <div class="progress-header">
+                            <div class="progress-label">Installation Progress</div>
+                            <div class="progress-percentage">31%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill in-progress"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-forms">
+                    <div class="forms-count">1 checklist in this section</div>
+                    <div class="forms-list">
+                        <div class="form-tag">⏳ Installation Steps (5 of 16 complete)</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="group-section">
+            <a href="mobile-post-install-group.html" class="group-card post-install">
+                <div class="group-header">
+                    <div class="group-status pending">Pending</div>
+                    <div class="group-icon-container">
+                        <div class="group-icon post-install">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 12l2 2 4-4"/>
+                                <circle cx="12" cy="12" r="9"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="group-title">POST-INSTALLATION</div>
+                            <div class="group-subtitle">Registration & Certification</div>
+                        </div>
+                    </div>
+                    <div class="group-description">
+                        Complete product registration and Standard Assessment Procedure compliance documentation for building regulations approval.
+                    </div>
+                    <div class="group-progress">
+                        <div class="progress-header">
+                            <div class="progress-label">Post-Install Progress</div>
+                            <div class="progress-percentage">0%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill pending"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-forms">
+                    <div class="forms-count">2 forms in this section</div>
+                    <div class="forms-list">
+                        <div class="form-tag">○ Registration Form (6 Sections)</div>
+                        <div class="form-tag">○ SAP Checklist (7 Questions)</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <div class="cta-section">
+            <div class="cta-title">Continue Installation</div>
+            <div class="cta-text">
+                You're currently on step 5 of 16 in the installation process. Continue where you left off to complete the physical installation.
+            </div>
+            <a href="installation-checklist-form.html" class="cta-btn">Resume Installation</a>
+        </div>
+    </div>
+    
+    <div class="bottom-nav">
+        <button class="nav-btn" onclick="window.location.href='mobile-dashboard.html'">Dashboard</button>
+        <button class="nav-btn primary">Workflow</button>
+        <button class="nav-btn">Settings</button>
+    </div>
+
+    <script>
+        // Touch feedback for all interactive elements
+        document.querySelectorAll('.group-card, .cta-btn, .nav-btn, .back-btn').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.8';
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+            
+            element.addEventListener('touchcancel', function() {
+                this.style.opacity = '1';
+            });
+        });
+        
+        // Animate progress bars on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.progress-fill').forEach(bar => {
+                    const width = bar.style.width || bar.classList.contains('completed') ? '100%' : 
+                                 bar.classList.contains('in-progress') ? '31%' : '0%';
+                    bar.style.width = width;
+                });
+            }, 300);
+        });
+    </script>
+</body>
+</html>

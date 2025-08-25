@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design Checklist Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F8F9FA;
+            line-height: 1.5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 16px;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .customer-context {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 4px;
+            font-weight: 400;
+        }
+        
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 4px;
+            margin-top: 12px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: white;
+            height: 100%;
+            width: 20%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .form-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 16px 80px 16px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            margin: 16px 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+            padding: 20px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .section-content {
+            padding: 24px 20px;
+        }
+        
+        .question {
+            margin-bottom: 32px;
+        }
+        
+        .question:last-child {
+            margin-bottom: 0;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            color: #2C3E50;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #F8F9FA;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 56px;
+        }
+        
+        .option:hover {
+            background: #E8F4FF;
+            border-color: #2E86C1;
+        }
+        
+        .option.selected {
+            background: #EBF4FF;
+            border-color: #2E86C1;
+        }
+        
+        .radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #BDC3C7;
+            border-radius: 50%;
+            margin-right: 16px;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        
+        .option.selected .radio {
+            border-color: #2E86C1;
+        }
+        
+        .option.selected .radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background: #2E86C1;
+            border-radius: 50%;
+        }
+        
+        .option-text {
+            font-size: 16px;
+            color: #2C3E50;
+            font-weight: 500;
+        }
+        
+        .intro-text {
+            background: #F8F9FA;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 15px;
+            color: #7B8A8B;
+            line-height: 1.5;
+        }
+        
+        .note {
+            background: #FFF3CD;
+            border: 1px solid #FFEAA7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #856404;
+        }
+        
+        .signature-section {
+            background: white;
+            border-radius: 16px;
+            margin: 16px 0;
+            padding: 24px 20px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .signature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 16px;
+        }
+        
+        .signature-text {
+            font-size: 15px;
+            color: #7B8A8B;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+            min-height: 56px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #2E86C1;
+            background: #F8FCFF;
+        }
+        
+        .signature-canvas {
+            width: 100%;
+            height: 120px;
+            border: 2px dashed #BDC3C7;
+            border-radius: 12px;
+            background: #FAFAFA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7B8A8B;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .signature-canvas:hover {
+            border-color: #2E86C1;
+            background: #F8FCFF;
+        }
+        
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 20px;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 56px;
+        }
+        
+        .btn-secondary {
+            background: #F8F9FA;
+            color: #7B8A8B;
+            border: 2px solid #E9ECEF;
+        }
+        
+        .btn-secondary:active {
+            background: #E9ECEF;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        @media (max-width: 360px) {
+            .form-container {
+                padding: 0 12px 80px 12px;
+            }
+            
+            .section-content,
+            .signature-section {
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.location.href='mobile-form-groups.html'">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5m7-7l-7 7 7 7"/>
+                </svg>
+            </button>
+            <div class="header-info">
+                <div class="header-title">
+                    <span style="font-weight: bold; margin-right: 12px;">PiPe<span style="font-weight: 400; opacity: 0.8;">SW</span></span>
+                    Design Checklist
+                </div>
+                <div class="customer-context" id="customer-context">Loading customer...</div>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="intro-text">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="background: #2E86C1; color: white; padding: 8px 12px; border-radius: 8px; font-weight: bold;">
+                        PiPe<span style="font-weight: 400;">SW</span><br>
+                        <small style="font-size: 10px;">60|65|75</small>
+                    </div>
+                    <div style="text-align: center; flex: 1; font-size: 20px; font-weight: bold; color: #2C3E50;">
+                        DESIGN<br>CHECKLIST
+                    </div>
+                    <div style="background: #2E86C1; color: white; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 18px;">
+                        SAP
+                    </div>
+                </div>
+            </div>
+            <div style="border-top: 2px solid #2E86C1; padding-top: 16px;">
+                <strong>STANDARD ASSESSMENT PROCEDURE</strong><br>
+                <strong>Instantaneous Waste Water Heat Recovery Systems Design Checklist for Configurations A & B</strong><br><br>
+                Refer to the unit's installation manual for the optimum plumbing and drainage configurations and prepare drawings and a schedule of materials for the installation. The Designer's specification for product installation should ensure compliance with Approved Document Part H (2002) of the Building Regulations and the manufacturer's installation guidance.
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>NOTE:</strong> Instantaneous Electric Showers (IES) can be connected to WWHRS but in most cases will not reduce energy consumption, they will therefore not be counted within the SAP calculation. Hand-held showers (showers not fixed above head height) are ignored for the purposes of the SAP calculation.
+        </div>
+
+        <div class="section">
+            <div class="section-header">1. DWELLING EVALUATION</div>
+            <div class="section-content">
+                <div class="question">
+                    <div class="question-text">Has the system designer given due consideration to DHW delivery performance (water pressure and flow rate) as a result of WWHRS induced pressure drop?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q1', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q1', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Is the dwelling hot water system (DHW) a mains pressure system, such as Combination Boiler or Unvented cylinder?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q2', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q2', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Does the water heater accept a preheated water inlet (Max. 30 °C)? (N/A if installed in System B configuration.)</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q3', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q3', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q3', 'na')">
+                            <div class="radio"></div>
+                            <div class="option-text">N/A</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Does the shower(s) use a thermostatic mixing valve? (Ignore instantaneous electric showers.)</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q4', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q4', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Can the WWHRS be installed within the dwelling heated envelope?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q5', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q5', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">2. DRAINAGE CONNECTIONS</div>
+            <div class="section-content">
+                <div class="intro-text">
+                    Refer to the installation manual for the range of drainage configurations and ensure all drawings and specifications comply with the following aspects.
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Was a WWHRS installation location selected and stated on plans that minimised the length of drain pipe between shower and WWHRS (preferably less than 3 metres)?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q6', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q6', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">With reference to Approved Document – Part H (2002) of the Building Regulations and the installation manual, has an appropriate method for preventing the ingress of foul sewer gases as a result of the WWHRS installation been devised?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q7', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q7', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">3. PLUMBING CONNECTIONS</div>
+            <div class="section-content">
+                <div class="intro-text">
+                    Refer to the installation manual for the range of plumbing configurations; a decision on the appropriate configuration will be based on the relative installation locations of the shower(s), water heater, soil stack and the WWHRS unit.
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Does the drawing clearly indicate which system configuration (System A or B) has been selected and where the relevant connections terminate?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q8', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q8', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Do installation drawings indicate the requirement to label pipework between the WWHRS preheated water outlet and the water heater and/or shower cold water inlet(s) (depending on installation configuration) to prevent the future connection of any other service points, such as taps?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q9', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q9', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Do installation drawings indicate the requirement to insulate pipework between the WWHRS preheated water outlet and the water heater and/or shower cold water inlet(s) (depending on installation configuration) in accordance with the specification for DHW primary circulation pipes defined in 'Domestic Building Services Compliance Guide, 2010 Edition'?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q10', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q10', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">If shut-off valves are specified for WWHRS unit inlet and/or outlet, are they 'full flow' (non-restricting) shut-off valves? (Tick if N/A)</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q11', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q11', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q11', 'na')">
+                            <div class="radio"></div>
+                            <div class="option-text">N/A</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">4. INSTALLATION LOCATION</div>
+            <div class="section-content">
+                <div class="intro-text">
+                    The following aspects are important for Health & Safety reasons, correct product performance and for any potential maintenance and/or replacement of the WWHRS.
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Access provision is sufficient for cleaning or replacement of WWHRS unit if required?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q12', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q12', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Does the drawing specify an installation location for the WWHRS that does not normally exceed 25° C?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q13', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q13', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="signature-section">
+            <div class="signature-title">5. DESIGNER DECLARATION</div>
+            <div class="signature-text">
+                I declare that the design for this WWHRS has been prepared in accordance with the manufacturer's recommendations and the procedures outlined in this checklist.
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">System Design Authority:</label>
+                <input type="text" class="form-input" placeholder="Enter system design authority">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Designer's Name (PLEASE PRINT):</label>
+                <input type="text" class="form-input" placeholder="Enter designer's full name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Designer's Signature:</label>
+                <div class="signature-canvas">
+                    <span>Tap to sign</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Date:</label>
+                <input type="date" class="form-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-actions">
+        <button class="btn btn-secondary" onclick="window.location.href='mobile-dashboard.html'">Save Draft</button>
+        <button class="btn btn-primary" onclick="completeForm()">Complete</button>
+    </div>
+
+    <script>
+        function selectOption(element, questionId, value) {
+            // Remove selected class from all options in this question group
+            const questionContainer = element.closest('.question');
+            const allOptions = questionContainer.querySelectorAll('.option');
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const totalQuestions = 13; // Total number of questions
+            const answeredQuestions = document.querySelectorAll('.option.selected').length;
+            const progressPercentage = (answeredQuestions / totalQuestions) * 100;
+            
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = progressPercentage + '%';
+            
+            // Enable/disable complete button based on progress
+            const completeBtn = document.querySelector('.btn-primary');
+            if (answeredQuestions === totalQuestions) {
+                completeBtn.disabled = false;
+            } else {
+                completeBtn.disabled = true;
+            }
+        }
+        
+        // Initialize progress and load customer context
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCustomerContext();
+            updateProgress();
+        });
+        
+        function loadCustomerContext() {
+            const customerDataStr = sessionStorage.getItem('selectedCustomerData');
+            const contextElement = document.getElementById('customer-context');
+            
+            if (customerDataStr && contextElement) {
+                const customerData = JSON.parse(customerDataStr);
+                contextElement.textContent = `${customerData.name} • ${customerData.projectId}`;
+            } else if (contextElement) {
+                contextElement.textContent = 'No customer selected';
+            }
+        }
+        
+        // Add signature functionality
+        document.querySelector('.signature-canvas').addEventListener('click', function() {
+            this.innerHTML = '<span style="color: #2E86C1;">✓ Signature captured</span>';
+            this.style.borderColor = '#2E86C1';
+            this.style.backgroundColor = '#EBF4FF';
+        });
+        
+        function completeForm() {
+            // Show completion message and redirect
+            alert('Design Checklist completed! Redirecting to dashboard...');
+            setTimeout(() => {
+                window.location.href = 'mobile-dashboard.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

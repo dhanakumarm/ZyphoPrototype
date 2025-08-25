@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Projects - Zypho</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F8F9FA;
+            line-height: 1.5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 16px;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .pipe-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .pipe-main {
+            font-weight: 900;
+        }
+        
+        .pipe-sw {
+            font-weight: 400;
+            opacity: 0.8;
+        }
+        
+        .pipe-size {
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .add-customer-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .add-customer-btn:active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin: 24px 0 8px 0;
+            font-size: 22px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .page-subtitle {
+            text-align: center;
+            color: #7B8A8B;
+            font-size: 16px;
+            margin-bottom: 24px;
+            padding: 0 20px;
+        }
+        
+        .stats-container {
+            display: flex;
+            padding: 0 20px;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2E86C1;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #7B8A8B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .customers-container {
+            padding: 0 20px 100px 20px;
+        }
+        
+        .customer-card {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .customer-card:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .customer-header {
+            padding: 20px;
+            border-left: 4px solid transparent;
+        }
+        
+        .customer-card.completed .customer-header {
+            border-left-color: #27AE60;
+        }
+        
+        .customer-card.in-progress .customer-header {
+            border-left-color: #F39C12;
+        }
+        
+        .customer-card.pending .customer-header {
+            border-left-color: #E74C3C;
+        }
+        
+        .customer-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .customer-details h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 4px;
+        }
+        
+        .customer-details p {
+            font-size: 14px;
+            color: #7B8A8B;
+            margin-bottom: 2px;
+        }
+        
+        .customer-status {
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.completed {
+            background: #D4FFDF;
+            color: #27AE60;
+        }
+        
+        .status-badge.in-progress {
+            background: #FFF3CD;
+            color: #F39C12;
+        }
+        
+        .status-badge.pending {
+            background: #FADBD8;
+            color: #E74C3C;
+        }
+        
+        .progress-section {
+            margin-top: 16px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .progress-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #2C3E50;
+        }
+        
+        .progress-percentage {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2E86C1;
+        }
+        
+        .progress-bar {
+            background: #E9ECEF;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-fill.completed {
+            background: linear-gradient(135deg, #27AE60 0%, #2ECC71 100%);
+        }
+        
+        .progress-fill.in-progress {
+            background: linear-gradient(135deg, #F39C12 0%, #E67E22 100%);
+        }
+        
+        .progress-fill.pending {
+            background: linear-gradient(135deg, #E74C3C 0%, #C0392B 100%);
+        }
+        
+        .form-summary {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .form-chip {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+        
+        .form-chip.completed {
+            background: #D4FFDF;
+            color: #27AE60;
+        }
+        
+        .form-chip.pending {
+            background: #F8F9FA;
+            color: #7B8A8B;
+            border: 1px solid #E9ECEF;
+        }
+        
+        .customer-meta {
+            font-size: 12px;
+            color: #7B8A8B;
+            margin-top: 8px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px auto;
+            color: #BDC3C7;
+        }
+        
+        .empty-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+        
+        .empty-description {
+            font-size: 16px;
+            color: #7B8A8B;
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+        
+        .primary-btn {
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .primary-btn:active {
+            transform: translateY(2px);
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .small-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #2E86C1 0%, #3498DB 100%);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(46, 134, 193, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            transition: all 0.2s ease;
+        }
+        
+        .fab:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="back-btn" onclick="window.location.href='mobile-main-index.html'">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5m7-7l-7 7 7 7"/>
+                    </svg>
+                </button>
+                <div class="pipe-logo">
+                    <span class="pipe-main">PiPe</span><span class="pipe-sw">SW</span>
+                    <span class="pipe-size">60|65|75</span>
+                </div>
+            </div>
+            <button class="add-customer-btn" onclick="addNewCustomer()">
+                <svg class="small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14m7-7H5"/>
+                </svg>
+                Add
+            </button>
+        </div>
+    </div>
+
+    <div class="page-title">Customer Projects</div>
+    <div class="page-subtitle">Manage Zypho installations for all your customers</div>
+
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-number" id="total-customers">5</div>
+            <div class="stat-label">Total Projects</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="completed-projects">2</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="active-projects">3</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+    </div>
+
+    <div class="customers-container">
+        <div class="customer-card completed" onclick="openCustomer('customer-1')">
+            <div class="customer-header">
+                <div class="customer-info">
+                    <div class="customer-details">
+                        <h3>Thompson Residence</h3>
+                        <p>42 Oak Street, Manchester</p>
+                        <p>Customer: Mr. John Thompson</p>
+                        <p>Phone: +44 161 234 5678</p>
+                    </div>
+                    <div class="customer-status">
+                        <div class="status-badge completed">Completed</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Installation Progress</div>
+                        <div class="progress-percentage">100%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill completed" style="width: 100%;"></div>
+                    </div>
+                    <div class="form-summary">
+                        <div class="form-chip completed">Design ✓</div>
+                        <div class="form-chip completed">Installation ✓</div>
+                        <div class="form-chip completed">Registration ✓</div>
+                        <div class="form-chip completed">SAP ✓</div>
+                    </div>
+                </div>
+                <div class="customer-meta">
+                    Project #ZY-2024-001 • Completed on 15 Aug 2024
+                </div>
+            </div>
+        </div>
+
+        <div class="customer-card in-progress" onclick="openCustomer('customer-2')">
+            <div class="customer-header">
+                <div class="customer-info">
+                    <div class="customer-details">
+                        <h3>Williams New Build</h3>
+                        <p>15 Victoria Gardens, Leeds</p>
+                        <p>Customer: Mrs. Sarah Williams</p>
+                        <p>Phone: +44 113 987 6543</p>
+                    </div>
+                    <div class="customer-status">
+                        <div class="status-badge in-progress">In Progress</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Installation Progress</div>
+                        <div class="progress-percentage">75%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill in-progress" style="width: 75%;"></div>
+                    </div>
+                    <div class="form-summary">
+                        <div class="form-chip completed">Design ✓</div>
+                        <div class="form-chip completed">Installation ✓</div>
+                        <div class="form-chip completed">Registration ✓</div>
+                        <div class="form-chip pending">SAP</div>
+                    </div>
+                </div>
+                <div class="customer-meta">
+                    Project #ZY-2024-002 • Started on 20 Aug 2024
+                </div>
+            </div>
+        </div>
+
+        <div class="customer-card in-progress" onclick="openCustomer('customer-3')">
+            <div class="customer-header">
+                <div class="customer-info">
+                    <div class="customer-details">
+                        <h3>Davis Apartment Renovation</h3>
+                        <p>Flat 3B, 88 High Street, Birmingham</p>
+                        <p>Customer: Mr. & Mrs. Davis</p>
+                        <p>Phone: +44 121 456 7890</p>
+                    </div>
+                    <div class="customer-status">
+                        <div class="status-badge in-progress">In Progress</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Installation Progress</div>
+                        <div class="progress-percentage">45%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill in-progress" style="width: 45%;"></div>
+                    </div>
+                    <div class="form-summary">
+                        <div class="form-chip completed">Design ✓</div>
+                        <div class="form-chip pending">Installation</div>
+                        <div class="form-chip pending">Registration</div>
+                        <div class="form-chip pending">SAP</div>
+                    </div>
+                </div>
+                <div class="customer-meta">
+                    Project #ZY-2024-003 • Started on 22 Aug 2024
+                </div>
+            </div>
+        </div>
+
+        <div class="customer-card pending" onclick="openCustomer('customer-4')">
+            <div class="customer-header">
+                <div class="customer-info">
+                    <div class="customer-details">
+                        <h3>Miller Family Home</h3>
+                        <p>127 Elm Avenue, Liverpool</p>
+                        <p>Customer: The Miller Family</p>
+                        <p>Phone: +44 151 234 9876</p>
+                    </div>
+                    <div class="customer-status">
+                        <div class="status-badge pending">Not Started</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Installation Progress</div>
+                        <div class="progress-percentage">0%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill pending" style="width: 0%;"></div>
+                    </div>
+                    <div class="form-summary">
+                        <div class="form-chip pending">Design</div>
+                        <div class="form-chip pending">Installation</div>
+                        <div class="form-chip pending">Registration</div>
+                        <div class="form-chip pending">SAP</div>
+                    </div>
+                </div>
+                <div class="customer-meta">
+                    Project #ZY-2024-004 • Scheduled for 25 Aug 2024
+                </div>
+            </div>
+        </div>
+
+        <div class="customer-card pending" onclick="openCustomer('customer-5')">
+            <div class="customer-header">
+                <div class="customer-info">
+                    <div class="customer-details">
+                        <h3>Green Building Development</h3>
+                        <p>Plot 12, Riverside Park, Bristol</p>
+                        <p>Customer: Green Build Ltd</p>
+                        <p>Phone: +44 117 555 0123</p>
+                    </div>
+                    <div class="customer-status">
+                        <div class="status-badge pending">Not Started</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <div class="progress-label">Installation Progress</div>
+                        <div class="progress-percentage">0%</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill pending" style="width: 0%;"></div>
+                    </div>
+                    <div class="form-summary">
+                        <div class="form-chip pending">Design</div>
+                        <div class="form-chip pending">Installation</div>
+                        <div class="form-chip pending">Registration</div>
+                        <div class="form-chip pending">SAP</div>
+                    </div>
+                </div>
+                <div class="customer-meta">
+                    Project #ZY-2024-005 • Scheduled for 28 Aug 2024
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="fab" onclick="addNewCustomer()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 5v14m7-7H5"/>
+        </svg>
+    </button>
+
+    <script>
+        function openCustomer(customerId) {
+            // Store selected customer in session storage
+            sessionStorage.setItem('selectedCustomer', customerId);
+            
+            // Get customer data based on ID
+            const customerData = getCustomerData(customerId);
+            sessionStorage.setItem('selectedCustomerData', JSON.stringify(customerData));
+            
+            // Navigate to customer dashboard
+            window.location.href = 'mobile-dashboard.html';
+        }
+        
+        function getCustomerData(customerId) {
+            const customers = {
+                'customer-1': {
+                    id: 'customer-1',
+                    name: 'Thompson Residence',
+                    address: '42 Oak Street, Manchester',
+                    customer: 'Mr. John Thompson',
+                    phone: '+44 161 234 5678',
+                    projectId: 'ZY-2024-001',
+                    status: 'completed',
+                    progress: 100,
+                    startDate: '2024-08-01',
+                    completedDate: '2024-08-15'
+                },
+                'customer-2': {
+                    id: 'customer-2',
+                    name: 'Williams New Build',
+                    address: '15 Victoria Gardens, Leeds',
+                    customer: 'Mrs. Sarah Williams',
+                    phone: '+44 113 987 6543',
+                    projectId: 'ZY-2024-002',
+                    status: 'in-progress',
+                    progress: 75,
+                    startDate: '2024-08-20'
+                },
+                'customer-3': {
+                    id: 'customer-3',
+                    name: 'Davis Apartment Renovation',
+                    address: 'Flat 3B, 88 High Street, Birmingham',
+                    customer: 'Mr. & Mrs. Davis',
+                    phone: '+44 121 456 7890',
+                    projectId: 'ZY-2024-003',
+                    status: 'in-progress',
+                    progress: 45,
+                    startDate: '2024-08-22'
+                },
+                'customer-4': {
+                    id: 'customer-4',
+                    name: 'Miller Family Home',
+                    address: '127 Elm Avenue, Liverpool',
+                    customer: 'The Miller Family',
+                    phone: '+44 151 234 9876',
+                    projectId: 'ZY-2024-004',
+                    status: 'pending',
+                    progress: 0,
+                    scheduledDate: '2024-08-25'
+                },
+                'customer-5': {
+                    id: 'customer-5',
+                    name: 'Green Building Development',
+                    address: 'Plot 12, Riverside Park, Bristol',
+                    customer: 'Green Build Ltd',
+                    phone: '+44 117 555 0123',
+                    projectId: 'ZY-2024-005',
+                    status: 'pending',
+                    progress: 0,
+                    scheduledDate: '2024-08-28'
+                }
+            };
+            
+            return customers[customerId] || null;
+        }
+        
+        function addNewCustomer() {
+            // Navigate to add customer form
+            window.location.href = 'mobile-add-customer.html';
+        }
+        
+        // Add touch feedback
+        document.querySelectorAll('.customer-card, .fab, .add-customer-btn').forEach(element => {
+            element.addEventListener('touchstart', function() {
+                this.style.opacity = '0.8';
+            });
+            
+            element.addEventListener('touchend', function() {
+                this.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>

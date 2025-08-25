@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAP Checklist & Certificate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F8F9FA;
+            line-height: 1.5;
+        }
+        
+        .header {
+            background: #2E86C1;
+            color: white;
+            padding: 16px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            margin-right: 16px;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .back-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 4px;
+            margin-top: 12px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: white;
+            height: 100%;
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .form-container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px 16px 80px 16px;
+        }
+        
+        .customer-info {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .customer-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .customer-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            color: #2E86C1;
+        }
+        
+        .customer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        .customer-field {
+            grid-column: 1 / -1;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #2E86C1 0%, #5DADE2 100%);
+            color: white;
+            padding: 20px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .section-content {
+            padding: 24px 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s ease;
+            min-height: 56px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #2E86C1;
+            background: #F8FCFF;
+        }
+        
+        .question {
+            margin-bottom: 32px;
+            padding: 20px;
+            background: #F8F9FA;
+            border-radius: 12px;
+            border-left: 4px solid #2E86C1;
+        }
+        
+        .question:last-child {
+            margin-bottom: 0;
+        }
+        
+        .question-text {
+            font-size: 15px;
+            color: #2C3E50;
+            margin-bottom: 16px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+        
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 48px;
+            flex: 1;
+            min-width: 80px;
+        }
+        
+        .option:hover {
+            background: #E8F4FF;
+            border-color: #2E86C1;
+        }
+        
+        .option.selected {
+            background: #EBF4FF;
+            border-color: #2E86C1;
+        }
+        
+        .radio {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #BDC3C7;
+            border-radius: 50%;
+            margin-right: 10px;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        
+        .option.selected .radio {
+            border-color: #2E86C1;
+        }
+        
+        .option.selected .radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: #2E86C1;
+            border-radius: 50%;
+        }
+        
+        .option-text {
+            font-size: 14px;
+            color: #2C3E50;
+            font-weight: 500;
+        }
+        
+        .intro-text {
+            background: #F8F9FA;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #7B8A8B;
+            line-height: 1.5;
+        }
+        
+        .note {
+            background: #FFF3CD;
+            border: 1px solid #FFEAA7;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #856404;
+        }
+        
+        .config-selector {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .config-option {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #E9ECEF;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+        
+        .config-option.selected {
+            border-color: #2E86C1;
+            background: #EBF4FF;
+        }
+        
+        .config-letter {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E86C1;
+            margin-bottom: 8px;
+        }
+        
+        .config-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2C3E50;
+        }
+        
+        .counter-section {
+            background: #F8F9FA;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .counter-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 16px;
+        }
+        
+        .counter-input {
+            width: 80px;
+            text-align: center;
+            margin-left: 12px;
+        }
+        
+        .signature-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .signature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2C3E50;
+            margin-bottom: 16px;
+        }
+        
+        .signature-text {
+            font-size: 15px;
+            color: #7B8A8B;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .signature-canvas {
+            width: 100%;
+            height: 120px;
+            border: 2px dashed #BDC3C7;
+            border-radius: 12px;
+            background: #FAFAFA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7B8A8B;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .signature-canvas:hover {
+            border-color: #2E86C1;
+            background: #F8FCFF;
+        }
+        
+        .bottom-actions {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 16px 20px;
+            box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 56px;
+        }
+        
+        .btn-secondary {
+            background: #F8F9FA;
+            color: #7B8A8B;
+            border: 2px solid #E9ECEF;
+        }
+        
+        .btn-secondary:active {
+            background: #E9ECEF;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2E86C1 0%, #5DADE2 100%);
+            color: white;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(2px);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .required {
+            color: #E74C3C;
+            margin-left: 4px;
+        }
+        
+        @media (max-width: 360px) {
+            .customer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .config-selector {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <button class="back-btn" onclick="window.location.href='mobile-post-install-group.html'">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5m7-7l-7 7 7 7"/>
+                </svg>
+            </button>
+            <div class="header-title">SAP Checklist & Certificate</div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="customer-info">
+            <div class="customer-title">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="background: #2E86C1; color: white; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 14px;">
+                            PiPe<span style="font-weight: 400;">SW</span><br>
+                            <small style="font-size: 10px;">60|65|75</small>
+                        </div>
+                        <div style="text-align: center; flex: 1; font-size: 18px; font-weight: bold; color: #2C3E50;">
+                            SAP CHECKLIST<br>&amp; CERTIFICATE
+                        </div>
+                        <div style="background: #2E86C1; color: white; padding: 8px 12px; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                            SAP
+                        </div>
+                    </div>
+                </div>
+                <svg class="customer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                Customer Details
+            </div>
+            <div class="customer-grid">
+                <div class="form-group">
+                    <label class="form-label">Customer Name <span class="required">*</span></label>
+                    <input type="text" class="form-input" placeholder="Enter customer name" required>
+                </div>
+                <div class="form-group customer-field">
+                    <label class="form-label">Address <span class="required">*</span></label>
+                    <textarea class="form-input" rows="3" placeholder="Enter full address" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Telephone Number</label>
+                    <input type="tel" class="form-input" placeholder="Enter phone number">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Date of Installation <span class="required">*</span></label>
+                    <input type="date" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Name of Lead Contractor</label>
+                    <input type="text" class="form-input" placeholder="Enter contractor name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Installer Name/Company</label>
+                    <input type="text" class="form-input" placeholder="Enter installer details">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Project Reference Number</label>
+                    <input type="text" class="form-input" placeholder="Enter reference number">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">NCM (SAP) Identifier</label>
+                    <input type="text" class="form-input" placeholder="Enter SAP identifier">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">Product Information</div>
+            <div class="section-content">
+                <div class="form-group">
+                    <label class="form-label">Technology Type</label>
+                    <input type="text" class="form-input" value="Waste Water Heat Recovery System (WWHRS)" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Technology Category</label>
+                    <input type="text" class="form-input" value="Instantaneous Shower Heat Recovery" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Brand Name</label>
+                    <input type="text" class="form-input" placeholder="Enter brand name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Model Name</label>
+                    <input type="text" class="form-input" placeholder="Enter model name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Model Qualifier (Configuration) <span class="required">*</span></label>
+                    <div class="config-selector">
+                        <div class="config-option" onclick="selectConfig(this, 'A')">
+                            <div class="config-letter">A</div>
+                            <div class="config-name">System A</div>
+                        </div>
+                        <div class="config-option" onclick="selectConfig(this, 'B')">
+                            <div class="config-letter">B</div>
+                            <div class="config-name">System B</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="intro-text">
+            <strong>Standard Assessment Procedure</strong><br>
+            Instantaneous Waste Water Heat Recovery Systems Design Checklist for Configurations A & B<br><br>
+            Refer to the unit's installation manual and to installation drawings and specification for the plumbing and drainage installation configurations and locations. The installation must comply with Approved Document Part H (2002) of the Building Regulations and the manufacturer's installation guidance.
+        </div>
+
+        <div class="note">
+            <strong>NOTE:</strong> Instantaneous Electric Showers (IES) can be connected to WWHRS but in most cases will not reduce energy consumption, they will therefore not be counted within the SAP calculation. Hand-held showers (showers not fixed above head height) are ignored for the purposes of the SAP calculation.
+        </div>
+
+        <div class="section">
+            <div class="section-header">Section 1: Installation</div>
+            <div class="section-content">
+                <div class="question">
+                    <div class="question-text">1. DWELLING EVALUATION: Has the system installer given due consideration to DHW delivery performance (water pressure and flow rate) as a result of WWHRS induced pressure drop?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q1', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q1', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Is the dwelling hot water system (DHW) a mains pressure system, such as Combination Boiler or Unvented cylinder?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q2', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q2', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Does the water heater accept a preheated water inlet (Max. 30 °C)? (N/A if installed in System B configuration.)</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q3', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q3', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q3', 'na')">
+                            <div class="radio"></div>
+                            <div class="option-text">N/A</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Does the shower(s) use a thermostatic mixing valve? (Ignore instantaneous electric showers.)</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q4', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q4', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">Is the WWHRS installed within the dwelling heated envelope?</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q5', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q5', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">Section 2: Drainage Connections</div>
+            <div class="section-content">
+                <div class="intro-text">
+                    With reference to the installation manual and to installation drawings and specification. Ensure compliance with the following aspects:
+                </div>
+
+                <div class="question">
+                    <div class="question-text">The installation location has minimised the length of drain pipe between shower and WWHRS (preferably less than 3 metres).</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q6', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q6', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question">
+                    <div class="question-text">In accordance with Approved Document — Part H (2002) of the Building Regulations and the installation manual, the installation has implemented an appropriate method for preventing the ingress of foul sewer gases as a result of the WWHRS installation.</div>
+                    <div class="options">
+                        <div class="option" onclick="selectOption(this, 'q7', 'yes')">
+                            <div class="radio"></div>
+                            <div class="option-text">Yes</div>
+                        </div>
+                        <div class="option" onclick="selectOption(this, 'q7', 'no')">
+                            <div class="radio"></div>
+                            <div class="option-text">No</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">Section 3: Installation Certificate</div>
+            <div class="section-content">
+                <div class="counter-section">
+                    <div class="counter-title">2. ALL BATHROOMS CONNECTED OR NOT CONNECTED TO WWHRS</div>
+                    <div style="margin-bottom: 12px;">
+                        Count total number of rooms with mixer showers (including Instantaneous Electric Showers) and/or baths fitted, whether connected to WWHRS or not.
+                        <input type="number" class="counter-input" min="0" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="counter-section">
+                    <div class="counter-title">3. DETAILS FOR BATHROOMS WITH SHOWERS AND BATHS</div>
+                    <div style="margin-bottom: 12px;">
+                        Count total number of thermostatic mixer showers (exclude Instantaneous Electric Showers) with WWHRS₁ (System 1 = WWHRS₁) connected to drain in rooms with a bath.
+                        <input type="number" class="counter-input" min="0" placeholder="0">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        If applicable: Count total number of thermostatic mixer showers (exclude Instantaneous Electric Showers) with WWHRS₂ (System 2 = WWHRS₂) connected to drain in rooms with a bath.
+                        <input type="number" class="counter-input" min="0" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="counter-section">
+                    <div class="counter-title">4. DETAILS FOR BATHROOMS WITH SHOWERS BUT NOT BATHS</div>
+                    <div style="margin-bottom: 12px;">
+                        Count total number of thermostatic mixer showers (exclude Instantaneous Electric Showers) with WWHRS₁ (System 1 = WWHRS₁) connected to drain in rooms without a bath.
+                        <input type="number" class="counter-input" min="0" placeholder="0">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        If applicable: Count total number of thermostatic mixer showers (exclude Instantaneous Electric Showers) with WWHRS₂ (System 2 = WWHRS₂) connected to drain in rooms with a bath.
+                        <input type="number" class="counter-input" min="0" placeholder="0">
+                    </div>
+                </div>
+
+                <div class="note">
+                    <strong>NOTE:</strong> Hand-held showers (showers not fixed above head height) are ignored for the purposes of the SAP calculation and therefore should not be counted in any of the above.
+                </div>
+            </div>
+        </div>
+
+        <div class="signature-section">
+            <div class="signature-title">Section 4: Installer Declaration</div>
+            <div class="signature-text">
+                I declare that this WWHRS has been installed in accordance with the manufacturer's recommendations and the procedures outlined in this checklist.
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Installation Company:</label>
+                <input type="text" class="form-input" placeholder="Enter installation company name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Installer's Name (PLEASE PRINT):</label>
+                <input type="text" class="form-input" placeholder="Enter installer's full name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Installer's Signature:</label>
+                <div class="signature-canvas" onclick="captureSignature(this)">
+                    <span>Tap to sign</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Date:</label>
+                <input type="date" class="form-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-actions">
+        <button class="btn btn-secondary" onclick="window.location.href='mobile-dashboard.html'">Save Draft</button>
+        <button class="btn btn-primary" onclick="generateCertificate()">Generate Certificate</button>
+    </div>
+
+    <script>
+        function selectOption(element, questionId, value) {
+            // Remove selected class from all options in this question group
+            const questionContainer = element.closest('.question');
+            const allOptions = questionContainer.querySelectorAll('.option');
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        function selectConfig(element, config) {
+            // Remove selected class from all config options
+            const allConfigs = document.querySelectorAll('.config-option');
+            allConfigs.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const totalQuestions = 7; // Total number of questions
+            const answeredQuestions = document.querySelectorAll('.question .option.selected').length;
+            const configSelected = document.querySelector('.config-option.selected') ? 1 : 0;
+            
+            const totalItems = totalQuestions + 1; // questions + config selection
+            const answeredItems = answeredQuestions + configSelected;
+            
+            const progressPercentage = (answeredItems / totalItems) * 100;
+            
+            const progressFill = document.querySelector('.progress-fill');
+            progressFill.style.width = progressPercentage + '%';
+        }
+        
+        function captureSignature(element) {
+            element.innerHTML = '<span style="color: #2E86C1;">✓ Signature captured</span>';
+            element.style.borderColor = '#2E86C1';
+            element.style.backgroundColor = '#EBF4FF';
+        }
+        
+        // Initialize progress
+        updateProgress();
+        
+        function generateCertificate() {
+            alert('SAP Certificate generated successfully! Project complete. Redirecting to dashboard...');
+            setTimeout(() => {
+                window.location.href = 'mobile-dashboard.html';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
