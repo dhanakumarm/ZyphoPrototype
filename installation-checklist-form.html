@@ -673,7 +673,7 @@
     </div>
 
     <div class="bottom-actions">
-        <button class="btn btn-secondary" onclick="window.location.href='mobile-dashboard.html'">Save Progress</button>
+        <button class="btn btn-secondary" onclick="window.location.href='index.html'">Save Progress</button>
         <button class="btn btn-primary" onclick="completeInstallation()">Complete Installation</button>
     </div>
 
@@ -775,7 +775,7 @@
             if (completedSteps === 16) {
                 alert('Installation completed! All steps finished. Redirecting to dashboard...');
                 setTimeout(() => {
-                    window.location.href = 'mobile-dashboard.html';
+                    window.location.href = 'index.html';
                 }, 1000);
             } else {
                 alert(`Please complete all installation steps. ${completedSteps}/16 steps completed.`);
