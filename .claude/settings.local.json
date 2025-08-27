@@ -2,7 +2,12 @@
   "permissions": {
     "allow": [
       "Bash(del:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(mv:*)",
+      "Bash(move mobile-customer-list.html index-temp.html)",
+      "Bash(move:*)",
+      "Bash(cmd /c \"move DesignChecklist.pdf pdf\"\")",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
